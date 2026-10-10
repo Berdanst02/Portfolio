@@ -1,0 +1,59 @@
+<main>
+  <section class="intro">
+    <a class="back" routerLink="/" fragment="projects">← All projects</a>
+    <p class="eyebrow">Electronics · Eagle CAD · SPICE</p>
+    <h1>Current Sense PCB</h1>
+    <p class="lead">{{ project.overview }}</p>
+    <ul class="chips">
+      @for (tag of project.tags; track tag) {
+        <li>{{ tag }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="goal">
+    <h2>Goal</h2>
+    <p>{{ project.goal }}</p>
+    <ol class="stages">
+      @for (stage of project.stages; track stage.name) {
+        <li>
+          <strong>{{ stage.name }}</strong>
+          <span>{{ stage.text }}</span>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section class="render">
+    <button type="button" class="shot blueprint" (click)="zoomed.set(true)">
+      <img [src]="project.image" alt="Current sense PCB layout in Eagle CAD" />
+      <span class="zoom">Click to enlarge</span>
+    </button>
+  </section>
+
+  <section class="contribution">
+    <h2>My contribution</h2>
+    <ul>
+      @for (item of project.contributions; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </section>
+</main>
+
+@if (zoomed()) {
+  <div class="backdrop" (click)="close()">
+    <article
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Current sense PCB layout"
+      (click)="$event.stopPropagation()"
+    >
+      <button type="button" class="close" aria-label="Close" (click)="close()">×</button>
+      <div class="viewer">
+        <img [src]="project.image" alt="Current sense PCB layout in Eagle CAD" />
+      </div>
+    </article>
+  </div>
+}

@@ -1,31 +1,29 @@
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
-import { projects } from './projects';
+import { provideRouter } from '@angular/router';
+import { Home } from './home/home';
+import { experience, projects, skyjackFigures } from './projects';
+import { Skyjack } from './skyjack/skyjack';
 
-describe('App', () => {
+describe('Portfolio pages', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [Home, Skyjack],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
-  it('should render a card for every project', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('.card');
-    expect(cards.length).toBe(projects.length);
-  });
-
-  it('should filter by category', async () => {
-    const fixture = TestBed.createComponent(App);
+  it('home renders every project and job', async () => {
+    const fixture = TestBed.createComponent(Home);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
-    const buttons = el.querySelectorAll<HTMLButtonElement>('.filters button');
-    buttons[1].click();
+    expect(el.querySelectorAll('.card').length).toBe(projects.length);
+    expect(el.querySelectorAll('.timeline > li').length).toBe(experience.length);
+  });
+
+  it('skyjack page renders every figure', async () => {
+    const fixture = TestBed.createComponent(Skyjack);
     await fixture.whenStable();
-    const category = buttons[1].textContent!.trim();
-    expect(el.querySelectorAll('.card').length).toBe(
-      projects.filter((p) => p.category === category).length,
-    );
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelectorAll('figure').length).toBe(skyjackFigures.length);
   });
 });

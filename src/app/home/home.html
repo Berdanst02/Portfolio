@@ -1,0 +1,145 @@
+<main>
+  <section class="hero">
+    <p class="eyebrow">{{ profile.title }}</p>
+    <h1>Hi, I'm {{ profile.name }}.</h1>
+    <p class="lead">{{ profile.intro }}</p>
+    <div class="actions">
+      <a class="button" routerLink="/skyjack">See my Skyjack work</a>
+      <a class="button ghost" [href]="'mailto:' + profile.email">Get in touch</a>
+    </div>
+    <dl class="facts">
+      <div>
+        <dt>Studying</dt>
+        <dd>{{ profile.education.school }} · {{ profile.education.date }}</dd>
+      </div>
+      <div>
+        <dt>Certified</dt>
+        <dd>CSWA · {{ profile.certification.date }}</dd>
+      </div>
+      <div>
+        <dt>Currently</dt>
+        <dd>Design Intern, Skyjack</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="grid">
+      @for (project of projects; track project.id) {
+        @if (project.route) {
+          <a class="card featured" [routerLink]="project.route">
+            <div class="thumb blueprint">
+              <img [src]="project.images[0]" [alt]="project.title" loading="lazy" />
+            </div>
+            <div class="card-body">
+              <span class="meta">{{ project.category }} · {{ project.date }}</span>
+              <h3>{{ project.title }}</h3>
+              <p>{{ project.summary }}</p>
+              <ul class="chips">
+                @for (tool of project.tools; track tool) {
+                  <li>{{ tool }}</li>
+                }
+              </ul>
+              <span class="more">View project page →</span>
+            </div>
+          </a>
+        } @else {
+          <button type="button" class="card" (click)="selected.set(project)">
+            <div class="thumb blueprint">
+              <svg viewBox="0 0 120 80" aria-hidden="true">
+                <rect x="20" y="16" width="80" height="48" rx="3" />
+                <path d="M32 28h20v12H32zM62 28h26M62 40h26M32 52h56" />
+              </svg>
+            </div>
+            <div class="card-body">
+              <span class="meta">{{ project.category }} · {{ project.date }}</span>
+              <h3>{{ project.title }}</h3>
+              <p>{{ project.summary }}</p>
+              <ul class="chips">
+                @for (tool of project.tools; track tool) {
+                  <li>{{ tool }}</li>
+                }
+              </ul>
+            </div>
+          </button>
+        }
+      }
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <ol class="timeline">
+      @for (job of experience; track job.company) {
+        <li>
+          <div class="job-head">
+            <h3>{{ job.role }}</h3>
+            <span class="dates">{{ job.dates }}</span>
+          </div>
+          <p class="company">{{ job.company }} · {{ job.sector }} · {{ job.location }}</p>
+          <ul>
+            @for (bullet of job.bullets; track bullet) {
+              <li>{{ bullet }}</li>
+            }
+          </ul>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skill-grid">
+      @for (group of skills; track group.name) {
+        <div class="skill-group">
+          <h3>{{ group.name }}</h3>
+          <ul class="chips">
+            @for (item of group.items; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+    <p class="cert">
+      <strong>{{ profile.certification.name }}</strong> · {{ profile.certification.date }}
+    </p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p class="contact-line">
+      <a [href]="'mailto:' + profile.email">{{ profile.email }}</a>
+      · {{ profile.phone }} ·
+      <a [href]="profile.linkedin" target="_blank" rel="noopener">LinkedIn</a>
+    </p>
+  </section>
+</main>
+
+@if (selected(); as project) {
+  <div class="backdrop" (click)="close()">
+    <article
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="project.title"
+      (click)="$event.stopPropagation()"
+    >
+      <button type="button" class="close" aria-label="Close" (click)="close()">×</button>
+      <div class="details">
+        <span class="meta">{{ project.category }} · {{ project.date }}</span>
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.description }}</p>
+        <ul class="chips">
+          @for (tool of project.tools; track tool) {
+            <li>{{ tool }}</li>
+          }
+        </ul>
+        @if (project.link) {
+          <a class="button" [href]="project.link" target="_blank" rel="noopener">Open project ↗</a>
+        }
+      </div>
+    </article>
+  </div>
+}

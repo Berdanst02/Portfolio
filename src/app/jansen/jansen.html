@@ -1,0 +1,63 @@
+<main>
+  <section class="intro">
+    <a class="back" routerLink="/" fragment="projects">← All projects</a>
+    <p class="eyebrow">Mechanical Design · SolidWorks · FEA</p>
+    <h1>Jansen Linkage Project</h1>
+    <p class="lead">{{ project.overview }}</p>
+    <ul class="chips">
+      @for (tag of project.tags; track tag) {
+        <li>{{ tag }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="gallery">
+    @for (figure of project.figures; track figure.src) {
+      <figure>
+        <button type="button" class="shot blueprint" (click)="selected.set(figure)">
+          <img [src]="figure.src" [alt]="figure.title" loading="lazy" />
+          <span class="zoom">Click to enlarge</span>
+        </button>
+        <figcaption>
+          <h3>{{ figure.title }}</h3>
+          <p>{{ figure.caption }}</p>
+          <ul class="chips">
+            @for (tag of figure.tags; track tag) {
+              <li>{{ tag }}</li>
+            }
+          </ul>
+        </figcaption>
+      </figure>
+    }
+  </section>
+
+  <section class="contribution">
+    <h2>My contribution</h2>
+    <ul>
+      @for (item of project.contributions; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </section>
+</main>
+
+@if (selected(); as figure) {
+  <div class="backdrop" (click)="close()">
+    <article
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="figure.title"
+      (click)="$event.stopPropagation()"
+    >
+      <button type="button" class="close" aria-label="Close" (click)="close()">×</button>
+      <div class="viewer">
+        <img [src]="figure.src" [alt]="figure.title" />
+      </div>
+      <div class="details">
+        <h3>{{ figure.title }}</h3>
+        <p>{{ figure.caption }}</p>
+      </div>
+    </article>
+  </div>
+}
